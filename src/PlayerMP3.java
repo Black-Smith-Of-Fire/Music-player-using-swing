@@ -1,15 +1,10 @@
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
 
-import javax.print.URIException;
-
-public class LearningIo {
+public class PlayerMP3 {
     int totalLength ;
     int pauseLocation;
     Player player;
@@ -102,7 +97,7 @@ public class LearningIo {
     }
 
     public static void main(String[] args) throws JavaLayerException, IOException{
-        LearningIo lis = new LearningIo();
+        PlayerMP3 lis = new PlayerMP3();
         lis.play();
         Scanner scanner = new Scanner(System.in);
         while(!scanner.nextLine().equals("kill")) {
