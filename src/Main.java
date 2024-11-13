@@ -72,7 +72,7 @@ public class Main implements ActionListener {
 
         if(e.getSource() == rewind){
             try {
-                lis.rewind();
+                lis.rewind(1000000);
                 System.out.println("Rewind is working");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -83,7 +83,7 @@ public class Main implements ActionListener {
 
         if(e.getSource() == forward){
             try {
-                lis.fastForward();
+                lis.fastForward(1000000);
                 System.out.println("Forward is working");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -95,18 +95,6 @@ public class Main implements ActionListener {
 
     public static void main(String[] args) throws JavaLayerException, IOException {
         new Main();
-//        Scanner scanner = new Scanner(System.in);
-//        while(!scanner.nextLine().equals("kill")) {
-//            if (scanner.nextLine().equals("p")) {
-//                lis.pause();
-//            }
-//            if (scanner.nextLine().equals("r")) {
-//                lis.resume();
-//            }
-//            if (scanner.nextLine().equals("b")) {
-//                lis.rewind();
-//            }
-//        }
     }
 
 }
