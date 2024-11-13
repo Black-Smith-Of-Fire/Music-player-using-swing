@@ -56,10 +56,10 @@ public class PlayerMP3 {
         }
     }
 
-    public void rewind() throws IOException, JavaLayerException{
+    public void rewind(int value) throws IOException, JavaLayerException{
         pause();
         is = this.getClass().getResourceAsStream(musicFile);
-        int rewindMech = totalLength - (pauseLocation +1000000);
+        int rewindMech = totalLength - (pauseLocation + value);
         System.out.println("Rewind : " + rewindMech);
         is.skip(rewindMech);
 
@@ -78,10 +78,10 @@ public class PlayerMP3 {
         }.start();
     }
 
-    public void fastForward() throws IOException, JavaLayerException{
+    public void fastForward(int value) throws IOException, JavaLayerException{
         pause();
         is = this.getClass().getResourceAsStream(musicFile);
-        int rewindMech = totalLength - (pauseLocation - 1000000);
+        int rewindMech = totalLength - (pauseLocation - value);
         System.out.println("Rewind : " + rewindMech);
         is.skip(rewindMech);
 
