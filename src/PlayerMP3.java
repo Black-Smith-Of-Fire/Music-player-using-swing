@@ -10,7 +10,8 @@ public class PlayerMP3 {
     Player player;
     InputStream is;
     String musicFile = "mj beat it.mp3" ;
-
+//    String musicFile = "one-minute-clock.mp3" ;//1930135
+//    String musicFile = "./resources/gun salute.mp3";
     /**
      * this method is used to play a song, if u want to
      * repeat this song,  set Repeat to true before
@@ -77,6 +78,27 @@ public class PlayerMP3 {
         }.start();
     }
 
+    public void fastForward() throws IOException, JavaLayerException{
+        pause();
+        is = this.getClass().getResourceAsStream(musicFile);
+        int rewindMech = totalLength - (pauseLocation - 1000000);
+        System.out.println("Rewind : " + rewindMech);
+        is.skip(rewindMech);
+
+        player = new Player(is);
+
+        new Thread() {
+
+            @Override
+            public void run(){
+                try {
+                    player.play();
+                }catch (JavaLayerException e){
+                    e.printStackTrace();
+                }
+            }
+        }.start();
+    }
     public void resume() throws IOException, JavaLayerException{
         is = this.getClass().getResourceAsStream(musicFile);
         is.skip(totalLength - pauseLocation);
@@ -96,20 +118,4 @@ public class PlayerMP3 {
         }.start();
     }
 
-    public static void main(String[] args) throws JavaLayerException, IOException{
-        PlayerMP3 lis = new PlayerMP3();
-        lis.play();
-        Scanner scanner = new Scanner(System.in);
-        while(!scanner.nextLine().equals("kill")) {
-            if (scanner.nextLine().equals("p")) {
-                lis.pause();
-            }
-            if (scanner.nextLine().equals("r")) {
-                lis.resume();
-            }
-            if (scanner.nextLine().equals("b")) {
-                lis.rewind();
-            }
-        }
-    }
 }
