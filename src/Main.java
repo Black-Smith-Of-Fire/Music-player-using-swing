@@ -1,16 +1,19 @@
 import javazoom.jl.decoder.JavaLayerException;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Main implements ActionListener {
+public class Main implements ActionListener, ChangeListener {
     PlayerMP3 lis = new PlayerMP3();
-    JButton play , rewind , forward;
+    JButton play, pause, rewind, forward;
     JSlider slider;
+    boolean invisible = false;
 
     Main(){
         int x = 250 , y = 250;
@@ -35,9 +38,15 @@ public class Main implements ActionListener {
         play.setBounds(5,5,50,50);
         play.addActionListener(this);
 
+        pause = new JButton();
+        pause.setText("lol");
+        pause.setBounds(5,5,50,50);
+        pause.addActionListener(this);
 
-        slider = new JSlider(0,100, 50);
+
+        slider = new JSlider(0,100,0);
         slider.setPreferredSize(new Dimension(x,20));
+        slider.addChangeListener(this);
 
         forward = new JButton();
         forward.setText("F");
@@ -46,9 +55,13 @@ public class Main implements ActionListener {
 
         buttonPanel.add(rewind);
         buttonPanel.add(play);
+        buttonPanel.add(pause);
         buttonPanel.add(forward);
 
+        pause.setVisible(false);
+
         sliderPanel.add(slider);
+
         frame.setSize(x,y);
         frame.setTitle("Music Player");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,17 +75,26 @@ public class Main implements ActionListener {
         if(e.getSource() == play){
             try {
                 lis.play();
+                int total = lis.totalLength;
+                int ticksToMove = total / 100;
+                slider.setValue(lis.is.available()/ticksToMove);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
                 throw new RuntimeException(ex);
             }
+            play.setVisible(false);
+            pause.setVisible(true);
         }
 
-
+        if(e.getSource() == pause){
+                pause.setVisible(false);
+                play.setVisible(true);
+        }
         if(e.getSource() == rewind){
             try {
                 lis.rewind(1000000);
+                slider.setValue(50);
                 System.out.println("Rewind is working");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -92,6 +114,12 @@ public class Main implements ActionListener {
             }
         }
     }
+
+    @Override
+    public void stateChanged (ChangeEvent e){
+    }
+
+    public void sliderValueChange() {}
 
     public static void main(String[] args) throws JavaLayerException, IOException {
         new Main();
