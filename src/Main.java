@@ -146,17 +146,12 @@ public class Main implements ActionListener, ChangeListener {
             public void run() {
                 try {
                     int total = lis.totalLength;
-                    System.out.println("total is : " + total);
                     int leftOver = lis.is.available();
                     int ticksToMove = total / 100;
-                    System.out.println("ticks to move  is : " + ticksToMove);
-                    System.out.println("Leftover is : " + leftOver);
                     int value = (leftOver / ticksToMove);
-                    System.out.println("And the value is " + value);
                     slider.setValue(100 - value);
                 }
                 catch (IOException ex) {
-                    System.out.println("The stream is close");
                 }
                 sliderValueChange();
             }
