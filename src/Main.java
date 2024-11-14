@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Main implements ActionListener, ChangeListener {
     PlayerMP3 lis = new PlayerMP3();
-    JButton play, pause, rewind, forward;
+    JButton play, pause, rewind, forward, resume;
     JSlider slider;
     boolean invisible = false;
 
@@ -44,6 +44,11 @@ public class Main implements ActionListener, ChangeListener {
         pause.addActionListener(this);
 
 
+        resume = new JButton();
+        resume.setText("R");
+        resume.setBounds(5,5,50,50);
+        resume.addActionListener(this);
+
         slider = new JSlider(0,100,0);
         slider.setPreferredSize(new Dimension(x,20));
         slider.addChangeListener(this);
@@ -56,9 +61,11 @@ public class Main implements ActionListener, ChangeListener {
         buttonPanel.add(rewind);
         buttonPanel.add(play);
         buttonPanel.add(pause);
+        buttonPanel.add(resume);
         buttonPanel.add(forward);
 
         pause.setVisible(false);
+        resume.setVisible(false);
 
         sliderPanel.add(slider);
 
@@ -88,9 +95,27 @@ public class Main implements ActionListener, ChangeListener {
         }
 
         if(e.getSource() == pause){
-                pause.setVisible(false);
-                play.setVisible(true);
+            lis.pause();
+            pause.setVisible(false);
+            resume.setVisible(true);
         }
+
+
+        if(e.getSource() == resume){
+            try {
+                lis.resume();
+                int total = lis.totalLength;
+                int ticksToMove = total / 100;
+                slider.setValue(lis.is.available()/ticksToMove);
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (JavaLayerException ex) {
+                throw new RuntimeException(ex);
+            }
+            resume.setVisible(false);
+            pause.setVisible(true);
+        }
+
         if(e.getSource() == rewind){
             try {
                 lis.rewind(1000000);
