@@ -82,7 +82,7 @@ public class Main implements ActionListener, ChangeListener {
         if(e.getSource() == play){
             try {
                 lis.play();
-                sliderValueChange();
+//                sliderValueChange();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
@@ -113,8 +113,10 @@ public class Main implements ActionListener, ChangeListener {
 
         if(e.getSource() == rewind){
             try {
+                lis.pause();
+                resume.setVisible(false);
+                pause.setVisible(true);
                 lis.rewind(1000000);
-                slider.setValue(50);
                 System.out.println("Rewind is working");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
@@ -125,10 +127,13 @@ public class Main implements ActionListener, ChangeListener {
 
         if(e.getSource() == forward){
             try {
+                lis.pause();
                 lis.fastForward(1000000);
+                resume.setVisible(false);
+                pause.setVisible(true);
                 System.out.println("Forward is working");
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                System.out.println("Stream close");
             } catch (JavaLayerException ex) {
                 throw new RuntimeException(ex);
             }
@@ -137,6 +142,19 @@ public class Main implements ActionListener, ChangeListener {
 
     @Override
     public void stateChanged (ChangeEvent e){
+        lis.pause();
+        int ticksMoved = slider.getValue();
+        int total = lis.totalLength;
+        int ticksToMove = total / 100;
+        lis.pauseLocation = ticksMoved * ticksToMove;
+        try {
+            lis.resume();
+            sliderValueChange();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } catch (JavaLayerException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     public void sliderValueChange() {
