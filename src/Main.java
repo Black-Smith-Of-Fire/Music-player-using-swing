@@ -156,11 +156,11 @@ public class Main implements ActionListener, ChangeListener {
                     slider.setValue(100 - value);
                 }
                 catch (IOException ex) {
-                    System.err.println("Error caught " + ex);
+                    System.out.println("The stream is close");
                 }
+                sliderValueChange();
             }
         }.start();
-//        }
     }
 
     public static void main(String[] args) throws JavaLayerException, IOException {
