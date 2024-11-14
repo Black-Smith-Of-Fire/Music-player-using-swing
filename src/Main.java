@@ -82,9 +82,7 @@ public class Main implements ActionListener, ChangeListener {
         if(e.getSource() == play){
             try {
                 lis.play();
-                int total = lis.totalLength;
-                int ticksToMove = total / 100;
-                slider.setValue(lis.is.available()/ticksToMove);
+                sliderValueChange();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
@@ -104,9 +102,6 @@ public class Main implements ActionListener, ChangeListener {
         if(e.getSource() == resume){
             try {
                 lis.resume();
-                int total = lis.totalLength;
-                int ticksToMove = total / 100;
-                slider.setValue(lis.is.available()/ticksToMove);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
@@ -144,7 +139,11 @@ public class Main implements ActionListener, ChangeListener {
     public void stateChanged (ChangeEvent e){
     }
 
-    public void sliderValueChange() {}
+    public void sliderValueChange() throws IOException {
+        int total = lis.totalLength;
+        int ticksToMove = total / 100;
+        slider.setValue(lis.is.available()/ticksToMove);
+    }
 
     public static void main(String[] args) throws JavaLayerException, IOException {
         new Main();
