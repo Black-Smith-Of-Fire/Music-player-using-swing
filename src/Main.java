@@ -15,7 +15,7 @@ public class Main implements ActionListener, ChangeListener {
     JSlider slider;
     boolean invisible = false;
 
-    Main(){
+    Main() throws IOException{
         int x = 250 , y = 250;
         JFrame frame = new JFrame();
 
@@ -139,10 +139,28 @@ public class Main implements ActionListener, ChangeListener {
     public void stateChanged (ChangeEvent e){
     }
 
-    public void sliderValueChange() throws IOException {
-        int total = lis.totalLength;
-        int ticksToMove = total / 100;
-        slider.setValue(lis.is.available()/ticksToMove);
+    public void sliderValueChange() {
+        new Thread(){
+
+            @Override
+            public void run() {
+                try {
+                    int total = lis.totalLength;
+                    System.out.println("total is : " + total);
+                    int leftOver = lis.is.available();
+                    int ticksToMove = total / 100;
+                    System.out.println("ticks to move  is : " + ticksToMove);
+                    System.out.println("Leftover is : " + leftOver);
+                    int value = (leftOver / ticksToMove);
+                    System.out.println("And the value is " + value);
+                    slider.setValue(100 - value);
+                }
+                catch (IOException ex) {
+                    System.err.println("Error caught " + ex);
+                }
+            }
+        }.start();
+//        }
     }
 
     public static void main(String[] args) throws JavaLayerException, IOException {
