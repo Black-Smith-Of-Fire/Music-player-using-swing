@@ -9,9 +9,10 @@ public class PlayerMP3 {
     int pauseLocation;
     Player player;
     InputStream is;
-    String musicFile = "mj beat it.mp3" ;
-//    String musicFile = "one-minute-clock.mp3" ;//1930135
-//    String musicFile = "./resources/gun salute.mp3";
+    int skip;
+//    String musicFile = "SOS(indila).mp3" ;
+    String musicFile = "TWISTED_ROCK.mp3" ;//1930135
+//    String musicFile = "Paro(Nej).mp3";
     /**
      * this method is used to play a song, if u want to
      * repeat this song,  set Repeat to true before
@@ -99,9 +100,14 @@ public class PlayerMP3 {
             }
         }.start();
     }
+
     public void resume() throws IOException, JavaLayerException{
         is = this.getClass().getResourceAsStream(musicFile);
-        is.skip(totalLength - pauseLocation);
+        System.out.println("The total length is : " + totalLength);
+        System.out.println("The pause location is : " + pauseLocation);
+        skip = totalLength - pauseLocation;
+        System.out.println("We skip over : " + skip);
+        is.skip(skip);
 
         player = new Player(is);
 
