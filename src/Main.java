@@ -7,15 +7,15 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Main implements ActionListener, ChangeListener {
     PlayerMP3 lis = new PlayerMP3();
     JButton play, pause, rewind, forward, resume;
     JSlider slider;
-    boolean invisible = false;
+    int total = lis.totalLength; // 1000
+    static boolean invisible;
 
-    Main() throws IOException{
+    Main(){
         int x = 250 , y = 250;
         JFrame frame = new JFrame();
 
@@ -49,9 +49,13 @@ public class Main implements ActionListener, ChangeListener {
         resume.setBounds(5,5,50,50);
         resume.addActionListener(this);
 
+        invisible = true;
+
         slider = new JSlider(0,100,0);
         slider.setPreferredSize(new Dimension(x,20));
-        slider.addChangeListener(this);
+        if (invisible == false) {
+            slider.addChangeListener(this); // Comment this
+        }
 
         forward = new JButton();
         forward.setText("F");
@@ -82,10 +86,15 @@ public class Main implements ActionListener, ChangeListener {
         if(e.getSource() == play){
             try {
                 lis.play();
-//                sliderValueChange();
+                switcher();
+                if (invisible == true) {
+                    sliderValueChange();
+                }//Comment this
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
+                throw new RuntimeException(ex);
+            } catch (InterruptedException ex) {
                 throw new RuntimeException(ex);
             }
             play.setVisible(false);
@@ -115,6 +124,7 @@ public class Main implements ActionListener, ChangeListener {
             try {
                 lis.pause();
                 resume.setVisible(false);
+                play.setVisible(false);
                 pause.setVisible(true);
                 lis.rewind(1000000);
                 System.out.println("Rewind is working");
@@ -130,6 +140,7 @@ public class Main implements ActionListener, ChangeListener {
                 lis.pause();
                 lis.fastForward(1000000);
                 resume.setVisible(false);
+                play.setVisible(false);
                 pause.setVisible(true);
                 System.out.println("Forward is working");
             } catch (IOException ex) {
@@ -142,14 +153,18 @@ public class Main implements ActionListener, ChangeListener {
 
     @Override
     public void stateChanged (ChangeEvent e){
+        System.out.println("SSSSSSSState is changinggggggggggggggggggggggggggg");
         lis.pause();
-        int ticksMoved = slider.getValue();
-        int total = lis.totalLength;
-        int ticksToMove = total / 100;
-        lis.pauseLocation = ticksMoved * ticksToMove;
+        int ticksMoved = slider.getValue(); // 2
+        System.out.println("Ticks moved : " + ticksMoved);
+        System.out.println("Total length : " + total);
+        int ticksToMove = total / 100; // 1000 / 100
+        System.out.println("Ticks to move : " + ticksToMove);
+        lis.pauseLocation = total - (ticksMoved * ticksToMove); // 2 x 10
+        System.out.println("Pause location : " + lis.pauseLocation);
         try {
             lis.resume();
-            sliderValueChange();
+//            sliderValueChange();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } catch (JavaLayerException ex) {
@@ -158,22 +173,53 @@ public class Main implements ActionListener, ChangeListener {
     }
 
     public void sliderValueChange() {
+//        System.out.println("lollllllllllllllllllllllllllllllllllllllllll");
         new Thread(){
 
             @Override
             public void run() {
                 try {
-                    int total = lis.totalLength;
-                    int leftOver = lis.is.available();
-                    int ticksToMove = total / 100;
-                    int value = (leftOver / ticksToMove);
-                    slider.setValue(100 - value);
+                    int total = lis.totalLength; // 1000
+//                    System.out.println("The total is : " + total);
+                    int leftOver = lis.is.available();// 900
+//                    System.out.println("The leftover is : " + leftOver);
+                    int ticksToMove = total / 100;// 10
+//                    System.out.println("The ticksToMove is : " + ticksToMove);
+                    int value = (leftOver / ticksToMove); // 90
+//                    System.out.println("The value is : " + value);
+                    int newValue = 100 - value; // 10
+//                    System.out.println("The newValue is : " + newValue);
+                    slider.setValue(newValue);
                 }
                 catch (IOException ex) {
                 }
                 sliderValueChange();
             }
         }.start();
+    }
+
+    public boolean switcher() throws IOException, InterruptedException {
+//        new Thread () {
+//            @Override
+//            public void run(){
+//            int i = 0;
+//            while(i != -1) {
+//            try {
+//                i++;
+//            if (i % 2 == 0) {
+//                invisible = true;
+//                Thread.sleep(1000);
+//                System.out.println("Invisible is trueeeeeeeeeeeee");
+//            } else {
+//                invisible = false;
+//                System.out.println("Invisible is loooooooooooooooolllllllllllllllllllollolo");
+//            }
+//            } catch (InterruptedException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//        }}.start();
+        return invisible = false;
     }
 
     public static void main(String[] args) throws JavaLayerException, IOException {
