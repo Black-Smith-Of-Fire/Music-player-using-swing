@@ -18,12 +18,12 @@ public class Main implements ActionListener, ChangeListener {
         JFrame frame = new JFrame();
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBackground(Color.red);
+        buttonPanel.setBackground(Color.black);
         buttonPanel.setBounds(0,(y/2),x,(y/2));
 
         JPanel sliderPanel = new JPanel();
         sliderPanel.setBounds(0,0,x,(y/2));
-        sliderPanel.setBackground(Color.blue);
+        sliderPanel.setBackground(Color.black);
 
 
         rewind = new JButton();
@@ -69,6 +69,7 @@ public class Main implements ActionListener, ChangeListener {
 
         frame.setSize(x,y);
         frame.setTitle("Music Player");
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(buttonPanel);
         frame.add(sliderPanel);
@@ -115,7 +116,6 @@ public class Main implements ActionListener, ChangeListener {
                 resume.setVisible(false);
                 pause.setVisible(true);
                 lis.rewind(1000000);
-                System.out.println("Rewind is working");
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
@@ -148,6 +148,8 @@ public class Main implements ActionListener, ChangeListener {
             try {
                 lis.pauseLocation = lis.totalLength - (currPos * ticksToMove);
                 lis.resume();
+                pause.setVisible(true);
+                resume.setVisible(false);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
