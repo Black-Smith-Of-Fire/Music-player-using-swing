@@ -12,6 +12,7 @@ public class Main implements ActionListener, ChangeListener {
     PlayerMP3 lis = new PlayerMP3();
     JButton play, pause, rewind, forward, resume;
     JSlider slider;
+    ImageIcon image = new ImageIcon("src/Icon.png");
 
     Main() {
         int x = 250 , y = 250;
@@ -68,6 +69,7 @@ public class Main implements ActionListener, ChangeListener {
         sliderPanel.add(slider);
 
         frame.setSize(x,y);
+        frame.setIconImage(image.getImage());
         frame.setTitle("Music Player");
         frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
