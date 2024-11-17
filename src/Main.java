@@ -7,14 +7,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Main implements ActionListener, ChangeListener {
     PlayerMP3 lis = new PlayerMP3();
     JButton play, pause, rewind, forward, resume;
     JSlider slider;
 
-    Main() throws IOException{
+    Main() {
         int x = 250 , y = 250;
         JFrame frame = new JFrame();
 
@@ -143,13 +142,12 @@ public class Main implements ActionListener, ChangeListener {
     public void stateChanged (ChangeEvent e) {
         if (slider.getValueIsAdjusting() == true) {
             lis.pause();
-            int ticksMoved = slider.getValue();
+            int currPos = slider.getValue();
             int total = lis.totalLength;
             int ticksToMove = total / 100;
-            lis.pauseLocation = ticksMoved * ticksToMove;
             try {
+                lis.pauseLocation = lis.totalLength - (currPos * ticksToMove);
                 lis.resume();
-//            sliderValueChange();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
@@ -157,12 +155,15 @@ public class Main implements ActionListener, ChangeListener {
             }
         }
         else{
-            slider.removeChangeListener(this);
-//            slider.removeChangeListener(this);
+            sliderValueChange();
         }
     }
 
     public void sliderValueChange() {
+        if (slider.getValueIsAdjusting()) {
+            return;
+        }
+
         new Thread(){
 
             @Override
