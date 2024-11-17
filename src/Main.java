@@ -13,7 +13,6 @@ public class Main implements ActionListener, ChangeListener {
     PlayerMP3 lis = new PlayerMP3();
     JButton play, pause, rewind, forward, resume;
     JSlider slider;
-    boolean invisible = false;
 
     Main() throws IOException{
         int x = 250 , y = 250;
@@ -82,7 +81,7 @@ public class Main implements ActionListener, ChangeListener {
         if(e.getSource() == play){
             try {
                 lis.play();
-//                sliderValueChange();
+                sliderValueChange();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
@@ -141,19 +140,25 @@ public class Main implements ActionListener, ChangeListener {
     }
 
     @Override
-    public void stateChanged (ChangeEvent e){
-        lis.pause();
-        int ticksMoved = slider.getValue();
-        int total = lis.totalLength;
-        int ticksToMove = total / 100;
-        lis.pauseLocation = ticksMoved * ticksToMove;
-        try {
-            lis.resume();
-            sliderValueChange();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        } catch (JavaLayerException ex) {
-            throw new RuntimeException(ex);
+    public void stateChanged (ChangeEvent e) {
+        if (slider.getValueIsAdjusting() == true) {
+            lis.pause();
+            int ticksMoved = slider.getValue();
+            int total = lis.totalLength;
+            int ticksToMove = total / 100;
+            lis.pauseLocation = ticksMoved * ticksToMove;
+            try {
+                lis.resume();
+//            sliderValueChange();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            } catch (JavaLayerException ex) {
+                throw new RuntimeException(ex);
+            }
+        }
+        else{
+            slider.removeChangeListener(this);
+//            slider.removeChangeListener(this);
         }
     }
 
