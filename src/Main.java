@@ -49,13 +49,13 @@ public class Main implements ActionListener, ChangeListener {
         resume.setBounds(5,5,50,50);
         resume.addActionListener(this);
 
-        invisible = true;
+//        invisible = true;
 
         slider = new JSlider(0,100,0);
         slider.setPreferredSize(new Dimension(x,20));
-        if (invisible == false) {
-            slider.addChangeListener(this); // Comment this
-        }
+//        if (invisible == false) {
+//            slider.addChangeListener(this); // Comment this
+//        }
 
         forward = new JButton();
         forward.setText("F");
@@ -86,17 +86,18 @@ public class Main implements ActionListener, ChangeListener {
         if(e.getSource() == play){
             try {
                 lis.play();
-                switcher();
-                if (invisible == true) {
+//                switcher();
+//                if (invisible == true) {
                     sliderValueChange();
-                }//Comment this
+//                }//Comment this
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (JavaLayerException ex) {
                 throw new RuntimeException(ex);
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
             }
+//            catch (InterruptedException ex) {
+//                throw new RuntimeException(ex);
+//            }
             play.setVisible(false);
             pause.setVisible(true);
         }
