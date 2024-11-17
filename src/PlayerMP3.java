@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Scanner;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.Player;
@@ -12,23 +11,13 @@ public class PlayerMP3 {
     String musicFile = "mj beat it.mp3" ;
 //    String musicFile = "one-minute-clock.mp3" ;//1930135
 //    String musicFile = "./resources/gun salute.mp3";
-    /**
-     * this method is used to play a song, if u want to
-     * repeat this song,  set Repeat to true before
-     * call this method
-     * NOTE: the files to play must be in resources folder
-     * @throws FileNotFoundException
-     * @throws JavaLayerException
-     * @throws IOException
-     * @throws java.net.URISyntaxException
-     */
 
 
     public void play() throws IOException,  JavaLayerException {
         is = this.getClass().getResourceAsStream(musicFile);
         totalLength = is.available();
         player = new Player(is);
-        System.out.println(totalLength);
+
         new Thread(){
 
             @Override
@@ -82,7 +71,6 @@ public class PlayerMP3 {
         pause();
         is = this.getClass().getResourceAsStream(musicFile);
         int rewindMech = totalLength - (pauseLocation - value);
-        System.out.println("Rewind : " + rewindMech);
         is.skip(rewindMech);
 
         player = new Player(is);
