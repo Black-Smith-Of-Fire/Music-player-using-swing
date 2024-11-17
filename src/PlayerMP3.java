@@ -105,9 +105,8 @@ public class PlayerMP3 {
         is = this.getClass().getResourceAsStream(musicFile);
         System.out.println("The total length is : " + totalLength);
         System.out.println("The pause location is : " + pauseLocation);
-        skip = totalLength - pauseLocation;
         System.out.println("We skip over : " + skip);
-        is.skip(skip);
+        is.skip(totalLength - pauseLocation);
 
         player = new Player(is);
 
