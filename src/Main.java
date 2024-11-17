@@ -38,7 +38,7 @@ public class Main implements ActionListener, ChangeListener {
         play.addActionListener(this);
 
         pause = new JButton();
-        pause.setText("lol");
+        pause.setText("P");
         pause.setBounds(5,5,50,50);
         pause.addActionListener(this);
 
